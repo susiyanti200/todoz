@@ -29,6 +29,7 @@ h1 {
 }
 
 header {
+  background: #fff;
   position: sticky;
   top: 6vh;
   z-index: 2;
@@ -111,10 +112,61 @@ textarea {
   outline: none;
   padding: 0.25rem 0.55rem;
   width: 100%;
+  margin-bottom: 0.5rem;
+  resize: none;
+}
+
+input[type="checkbox"] {
+  margin-right: 1rem;
 }
 
 .content {
   padding: 0 5vw;
+}
+
+.content li {
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.due {
+  color: white;
+  border-radius: 1rem;
+  padding: 0.125rem 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.action {
+  margin-left: 2rem;
+}
+
+.action button {
+  padding: 0;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.add-todo {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgb(112, 111, 111);
+  padding: 1rem;
+  background: #fff;
+}
+
+.high {
+  background: red;
+}
+
+.mid {
+  background: yellow;
+}
+
+.low {
+  background: green;
 }
 
 @media (min-width: 600px) {
@@ -133,5 +185,20 @@ textarea {
 
   .content.toggle {
     margin-left: 0;
+  }
+
+  .action {
+    margin-left: auto;
+  }
+
+  .content li {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .list-header {
+    margin: 0rem;
+    flex: 1;
   }
 }

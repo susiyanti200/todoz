@@ -48,7 +48,8 @@ function moveToDoToProject(todo, projectName) {
   targetProject.addToDo(todo);
 }
 
-function addToDo(title, description, dueDate, priority, projectName = "") {
+function addToDo({ title, description, dueDate, priority, projectName = "" }) {
+  if (!(title && description && dueDate && priority)) throw "Can not add todo!";
   const targetProject = projectName ? findProject(projectName) : activeProject;
   targetProject.addToDo(new ToDo(title, description, dueDate, priority));
 }
