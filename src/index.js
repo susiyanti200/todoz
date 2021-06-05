@@ -1,27 +1,32 @@
 import * as App from "./app";
+import "./style.css";
+import PubSub from "pubsub-js";
 
-console.log(App.getProjects());
+import projectListEl from "./components/projectlist";
+import todoListEl from "./components/todolist";
+import header from "./components/header";
 
-// App.addProject("inbox"); // can't add default project
-App.addProject("work");
-// App.addProject("work"); // can't add existing project
-console.log(App.getProjects());
+const body = document.querySelector("body");
+const main = document.createElement("main");
+main.append(projectListEl, todoListEl);
+body.append(header, main);
 
-App.addToDo("write", "finished your writing", "2021-06-06", "high");
-App.addToDo("read", "finished your reading", "2021-06-06", "low", "work");
-const todo = App.getToDoList();
-console.log(todo);
-console.log(App.getProjects());
+PubSub.publish("PROJECTLIST", App.getProjects());
+PubSub.publish("TODOLIST", App.getToDoList());
 
-// App.updateTodo(todo[0], { isDone: true }); // specify updated information in the 2nd parameter
-// console.log(App.getToDoList());
-// console.log(App.getCompletedToDoList());
+const tokenAddProject = PubSub.subscribe("ADD_PROJECT", (msg, data) => {
+  App.addProject(data);
+  PubSub.publish("PROJECTLIST", App.getProjects());
+});
 
-App.moveToDoToProject(todo[0], "work");
-console.log(App.getCompletedToDoList());
-console.log(App.getProjects());
-App.switchProject("work");
-console.log(App.getProjects());
-App.moveToDoToProject(todo[0], "inbox");
-App.removeProject("work");
-console.log(App.getProjects());
+const tokenSwitchProject = PubSub.subscribe("SWITCH_PROJECT", (msg, data) => {
+  App.switchProject(data);
+  PubSub.publish("PROJECTLIST", App.getProjects());
+  PubSub.publish("TODOLIST", App.getToDoList());
+});
+
+const tokenChangeProject = PubSub.subscribe("DEL_PROJECT", (msg, data) => {
+  App.removeProject(data);
+  PubSub.publish("PROJECTLIST", App.getProjects());
+  PubSub.publish("TODOLIST", App.getToDoList());
+});
