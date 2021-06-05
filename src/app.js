@@ -1,7 +1,7 @@
 import Project from "./project";
 import ToDo from "./todo";
 
-const defaultProject = new Project("inbox");
+const defaultProject = new Project("Inbox");
 
 let activeProject = defaultProject;
 
@@ -10,6 +10,7 @@ let projectList = [defaultProject];
 function addProject(projectName) {
   if (projectList.find((activeProject) => activeProject.name === projectName))
     throw `'${projectName}' exists.`;
+  if (projectName === "") throw "Can not create project with no name";
   const project = new Project(projectName);
   projectList.push(project);
   return project;
@@ -27,6 +28,7 @@ function getProjects() {
     name: project.name,
     todoCount: project.notDoneToDoCount(),
     active: project.name === activeProject.name,
+    default: project.name === defaultProject.name,
   }));
 }
 
@@ -61,11 +63,11 @@ function updateTodo(todo, updatedInfo) {
 }
 
 function getToDoList() {
-  return activeProject.notDoneToDoList();
-}
-
-function getCompletedToDoList() {
-  return activeProject.doneToDoList();
+  return {
+    active: activeProject.name,
+    todoList: activeProject.notDoneToDoList(),
+    completeList: activeProject.doneToDoList(),
+  };
 }
 
 export {
@@ -78,5 +80,4 @@ export {
   updateTodo,
   moveToDoToProject,
   getToDoList,
-  getCompletedToDoList,
 };
