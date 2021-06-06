@@ -89,6 +89,11 @@ const addToDo = function (e) {
   hideAddToDoDialog();
 };
 
+const delToDo = function (e) {
+  console.log(e.currentTarget);
+  PubSub.publish("DEL_TODO", e.currentTarget.parentElement.parentElement.id);
+};
+
 const renderTodoList = function (msg = "", todos = []) {
   const content = document.querySelector(".content");
   const oldList = content.querySelector("ul");
@@ -99,6 +104,7 @@ const renderTodoList = function (msg = "", todos = []) {
   todos.todoList.forEach((todo) => {
     console.log(todo);
     const todoEl = document.createElement("li");
+    todoEl.id = todo.title;
     const header = document.createElement("div");
     header.className = "list-header";
     const checkbox = document.createElement("input");
@@ -123,6 +129,7 @@ const renderTodoList = function (msg = "", todos = []) {
     delIcon.className = "material-icons-outlined";
     delIcon.textContent = "delete";
     delButton.append(delIcon);
+    delButton.addEventListener("click", delToDo);
     action.append(editButton, delButton);
     todoEl.append(header, action);
     list.append(todoEl);

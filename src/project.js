@@ -1,5 +1,3 @@
-import { isTheSame } from "./helper";
-
 class Project {
   constructor(name) {
     this.name = name;
@@ -10,16 +8,16 @@ class Project {
     this.todoList.push(todo);
   }
 
-  findTodoIndex(todo) {
-    const todoIndex = this.todoList.findIndex((currentToDo) => {
-      return isTheSame(currentToDo, todo);
-    });
-    if (todoIndex === -1) throw `Could not find ToDo '${todo.title}'`;
+  findTodoIndex(title) {
+    const todoIndex = this.todoList.findIndex(
+      (currentToDo) => currentToDo.title === title
+    );
+    if (todoIndex === -1) throw `Could not find ToDo '${title}'`;
     return todoIndex;
   }
 
-  removeToDo(todo) {
-    const removedIndex = this.findTodoIndex(todo);
+  removeToDo(title) {
+    const removedIndex = this.findTodoIndex(title);
     const removedTodo = this.todoList.splice(removedIndex, 1);
     return removedTodo;
   }

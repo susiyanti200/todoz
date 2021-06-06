@@ -54,8 +54,8 @@ function addToDo({ title, description, dueDate, priority, projectName = "" }) {
   targetProject.addToDo(new ToDo(title, description, dueDate, priority));
 }
 
-function removeToDo(todo) {
-  activeProject.removeToDo(todo);
+function removeToDo(title) {
+  activeProject.removeToDo(title);
 }
 
 function updateTodo(todo, updatedInfo) {
