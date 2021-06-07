@@ -188,6 +188,7 @@ const renderTodoList = function (msg = "", todos = []) {
     header.className = "list-header";
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.checked = todo.isDone;
     checkbox.addEventListener("change", toggleDone);
     const title = document.createElement("span");
     title.textContent = todo.title;
