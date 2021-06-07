@@ -50,6 +50,7 @@ function moveToDoToProject(todo, projectName) {
 
 function addToDo({ title, description, dueDate, priority, projectName = "" }) {
   if (!(title && description && dueDate && priority)) throw "Can not add todo!";
+  if (activeProject.findTodoIndex(title) >= 0) throw `'${title}' exists.`;
   const targetProject = projectName ? findProject(projectName) : activeProject;
   targetProject.addToDo(new ToDo(title, description, dueDate, priority));
 }
@@ -60,12 +61,14 @@ function removeToDo(title) {
 
 function updateTodo(todo, updatedTodo) {
   const todoIndex = activeProject.findTodoIndex(todo);
+  if (todoIndex === -1) throw `Could not find ToDo '${title}'`;
   console.log(updatedTodo);
   activeProject.todoList[todoIndex] = new ToDo(...updatedTodo);
 }
 
 function toggleToDo(todo) {
   const todoIndex = activeProject.findTodoIndex(todo);
+  if (todoIndex === -1) throw `Could not find ToDo '${title}'`;
   activeProject.todoList[todoIndex].toggleIsDone();
 }
 

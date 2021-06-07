@@ -12,7 +12,6 @@ class Project {
     const todoIndex = this.todoList.findIndex(
       (currentToDo) => currentToDo.title === title
     );
-    if (todoIndex === -1) throw `Could not find ToDo '${title}'`;
     return todoIndex;
   }
 
