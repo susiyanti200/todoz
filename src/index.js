@@ -4,7 +4,7 @@ import PubSub from "pubsub-js";
 
 import projectListEl from "./components/projectlist";
 import todoListEl from "./components/todolist";
-import { generateHeader, alertDialog } from "./components/header";
+import { generateHeader, alertDialog } from "./components/helper";
 
 const body = document.querySelector("body");
 const main = document.createElement("main");
