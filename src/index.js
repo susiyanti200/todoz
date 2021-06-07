@@ -4,18 +4,22 @@ import PubSub from "pubsub-js";
 
 import projectListEl from "./components/projectlist";
 import todoListEl from "./components/todolist";
-import header from "./components/header";
+import { generateHeader, alertDialog } from "./components/header";
 
 const body = document.querySelector("body");
 const main = document.createElement("main");
 main.append(projectListEl, todoListEl);
-body.append(header, main);
+body.append(generateHeader(), main);
 
 PubSub.publish("PROJECTLIST", App.getProjects());
 PubSub.publish("TODOLIST", App.getToDoList());
 
 const tokenAddProject = PubSub.subscribe("ADD_PROJECT", (msg, data) => {
-  App.addProject(data);
+  try {
+    App.addProject(data);
+  } catch (err) {
+    body.append(alertDialog(err));
+  }
   PubSub.publish("PROJECTLIST", App.getProjects());
 });
 
@@ -32,7 +36,11 @@ const tokenChangeProject = PubSub.subscribe("DEL_PROJECT", (msg, data) => {
 });
 
 const tokenAddToDo = PubSub.subscribe("ADD_TODO", (msg, data) => {
-  App.addToDo(data);
+  try {
+    App.addToDo(data);
+  } catch (err) {
+    body.append(alertDialog(err));
+  }
   PubSub.publish("PROJECTLIST", App.getProjects());
   PubSub.publish("TODOLIST", App.getToDoList());
 });

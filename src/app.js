@@ -50,7 +50,8 @@ function moveToDoToProject(todo, projectName) {
 }
 
 function addToDo({ title, description, dueDate, priority, projectName = "" }) {
-  if (!(title && description && dueDate && priority)) throw "Can not add todo!";
+  if (!(title && description && dueDate && priority))
+    throw "Can not add todo with missing info!";
   if (activeProject.findTodoIndex(title) >= 0) throw `'${title}' exists.`;
   const targetProject = projectName ? findProject(projectName) : activeProject;
   targetProject.addToDo(new ToDo(title, description, dueDate, priority));
