@@ -70,7 +70,6 @@ function generateTodoList() {
 }
 
 const showEditableToDoDialog = function (e, mode, todo) {
-  console.log(e, mode, todo);
   form.style.display = "block";
   form.dataset.mode = mode || "add";
   addButton.style.display = "none";
@@ -92,7 +91,6 @@ const hideEditableToDoDialog = function (e) {
 };
 
 const saveToDo = function (e) {
-  console.log(form.dataset);
   if (form.dataset.mode === "edit") {
     PubSub.publish("EDIT_TODO", [
       form.dataset.editTodo,
@@ -122,7 +120,6 @@ const editToDo = function (e) {
 };
 
 const delToDo = function (e) {
-  console.log(e.currentTarget);
   PubSub.publish("DEL_TODO", e.currentTarget.parentElement.parentElement.id);
 };
 
@@ -136,7 +133,6 @@ const toggleMoveToDoEl = function (e) {
 };
 
 const moveToDoProject = function (e) {
-  console.log(e.currentTarget.parentElement.parentElement.parentElement.id);
   PubSub.publish("MOVE_TODO", [
     e.currentTarget.parentElement.parentElement.parentElement.id,
     e.currentTarget.textContent,
@@ -152,7 +148,6 @@ const renderTodoList = function (msg = "", todos = []) {
   h1.textContent = todos.active;
 
   todos.todoList.forEach((todo) => {
-    console.log(todo);
     const todoEl = document.createElement("li");
     todoEl.id = todo.title;
     const header = document.createElement("div");

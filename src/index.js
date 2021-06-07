@@ -44,7 +44,6 @@ const tokenDelToDo = PubSub.subscribe("DEL_TODO", (msg, data) => {
 });
 
 const tokenEditToDo = PubSub.subscribe("EDIT_TODO", (msg, data) => {
-  console.log(data);
   App.updateTodo(data[0], data.slice(1));
   PubSub.publish("PROJECTLIST", App.getProjects());
   PubSub.publish("TODOLIST", App.getToDoList());
@@ -57,7 +56,6 @@ const tokenToggleToDo = PubSub.subscribe("TOGGLE_TODO", (msg, data) => {
 });
 
 const tokenMoveToDo = PubSub.subscribe("MOVE_TODO", (msg, data) => {
-  console.log(data[0], data[1]);
   App.moveToDoToProject(data[0], data[1]);
   PubSub.publish("PROJECTLIST", App.getProjects());
   PubSub.publish("TODOLIST", App.getToDoList());

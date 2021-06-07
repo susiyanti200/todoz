@@ -63,7 +63,6 @@ function removeToDo(title) {
 function updateTodo(todo, updatedTodo) {
   const todoIndex = activeProject.findTodoIndex(todo);
   if (todoIndex === -1) throw `Could not find ToDo '${title}'`;
-  console.log(updatedTodo);
   activeProject.todoList[todoIndex] = new ToDo(...updatedTodo);
 }
 
