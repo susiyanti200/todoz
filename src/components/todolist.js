@@ -18,6 +18,9 @@ const project = document.createElement("select");
 const saveButton = document.createElement("button");
 const cancelButton = document.createElement("button");
 const moveToDoEl = document.createElement("ul");
+const done = document.createElement("button");
+const undone = document.createElement("button");
+let activeTab = "undone";
 let activeTodoList;
 
 function generateTodoList() {
@@ -66,9 +69,34 @@ function generateTodoList() {
   );
   form.className = "add-todo";
   form.style.display = "none";
-  section.append(header, list);
+
+  undone.textContent = "To Do";
+  undone.addEventListener("click", showToDoList);
+  undone.className = "active";
+
+  done.textContent = "Completed";
+  done.addEventListener("click", showCompletedList);
+
+  const tab = document.createElement("div");
+  tab.append(undone, done);
+
+  section.append(header, tab, list);
   return section;
 }
+
+const showToDoList = function (e) {
+  activeTab = "undone";
+  undone.className = "active";
+  done.className = "";
+  PubSub.publish("SWITCH_LIST", activeTodoList);
+};
+
+const showCompletedList = function (e) {
+  activeTab = "done";
+  done.className = "active";
+  undone.className = "";
+  PubSub.publish("SWITCH_LIST", activeTodoList);
+};
 
 const showEditableToDoDialog = function (e, mode, todo) {
   form.style.display = "block";
@@ -114,7 +142,11 @@ const saveToDo = function (e) {
 };
 
 const editToDo = function (e) {
-  const tobeEdit = activeTodoList.todoList.find(
+  const showList =
+    activeTab === "undone"
+      ? activeTodoList.todoList
+      : activeTodoList.completeList;
+  const tobeEdit = showList.find(
     (item) => item.title === e.currentTarget.parentElement.parentElement.id
   );
   showEditableToDoDialog(null, "edit", tobeEdit);
@@ -147,8 +179,9 @@ const renderTodoList = function (msg = "", todos = []) {
   const list = document.createElement("ul");
   const h1 = content.querySelector("h1");
   h1.textContent = todos.active;
-
-  todos.todoList.forEach((todo) => {
+  const shownList =
+    activeTab === "undone" ? todos.todoList : todos.completeList;
+  shownList.forEach((todo) => {
     const todoEl = document.createElement("li");
     todoEl.id = todo.title;
     const header = document.createElement("div");
@@ -223,6 +256,7 @@ const updateProjectOption = function (msg, data) {
   moveToDoEl.className = "hide";
 };
 
+const tokenSwitchTodoList = PubSub.subscribe("SWITCH_LIST", renderTodoList);
 const tokenTodoList = PubSub.subscribe("TODOLIST", renderTodoList);
 const tokenProjectist = PubSub.subscribe("PROJECTLIST", updateProjectOption);
 
