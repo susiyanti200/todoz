@@ -16,12 +16,13 @@ const priority = document.createElement("select");
 const project = document.createElement("select");
 const saveButton = document.createElement("button");
 const cancelButton = document.createElement("button");
+let activeTodoList;
 
 function generateTodoList() {
   section.className = "content";
   addButton.textContent = "New Todo";
   addButton.className = "btn-add";
-  addButton.addEventListener("click", showAddToDoDialog);
+  addButton.addEventListener("click", showEditableToDoDialog);
   header.append(h1, addButton, form);
 
   titleText.type = "text";
@@ -45,12 +46,12 @@ function generateTodoList() {
   saveButton.textContent = "Save";
   saveButton.className = "btn-save";
   saveButton.type = "button";
-  saveButton.addEventListener("click", addToDo);
+  saveButton.addEventListener("click", saveToDo);
 
   cancelButton.textContent = "Cancel";
   cancelButton.className = "btn-cancel";
   cancelButton.type = "button";
-  cancelButton.addEventListener("click", hideAddToDoDialog);
+  cancelButton.addEventListener("click", hideEditableToDoDialog);
 
   form.append(
     titleText,
@@ -67,26 +68,56 @@ function generateTodoList() {
   return section;
 }
 
-const showAddToDoDialog = function (e) {
+const showEditableToDoDialog = function (e, mode, todo) {
+  console.log(e, mode, todo);
   form.style.display = "block";
+  form.dataset.mode = mode || "add";
   addButton.style.display = "none";
+  project.style.display = "inline-block";
+  if (!e) {
+    form.dataset.editTodo = todo.title;
+    project.style.display = "none";
+    titleText.value = todo.title;
+    descText.value = todo.description;
+    calender.value = todo.dueDate;
+    priority.value = todo.priority;
+  }
 };
 
-const hideAddToDoDialog = function (e) {
+const hideEditableToDoDialog = function (e) {
+  form.reset();
   form.style.display = "none";
   addButton.style.display = "block";
 };
 
-const addToDo = function (e) {
-  PubSub.publish("ADD_TODO", {
-    title: titleText.value,
-    description: descText.value,
-    dueDate: calender.value,
-    priority: priority.value,
-    projectName: project.value,
-  });
+const saveToDo = function (e) {
+  console.log(form.dataset);
+  if (form.dataset.mode === "edit") {
+    PubSub.publish("EDIT_TODO", [
+      form.dataset.editTodo,
+      titleText.value,
+      descText.value,
+      calender.value,
+      priority.value,
+    ]);
+  } else {
+    PubSub.publish("ADD_TODO", {
+      title: titleText.value,
+      description: descText.value,
+      dueDate: calender.value,
+      priority: priority.value,
+      projectName: project.value,
+    });
+  }
   form.reset();
-  hideAddToDoDialog();
+  hideEditableToDoDialog();
+};
+
+const editToDo = function (e) {
+  const tobeEdit = activeTodoList.todoList.find(
+    (item) => item.title === e.currentTarget.parentElement.parentElement.id
+  );
+  showEditableToDoDialog(null, "edit", tobeEdit);
 };
 
 const delToDo = function (e) {
@@ -95,6 +126,7 @@ const delToDo = function (e) {
 };
 
 const renderTodoList = function (msg = "", todos = []) {
+  activeTodoList = todos;
   const content = document.querySelector(".content");
   const oldList = content.querySelector("ul");
   const list = document.createElement("ul");
@@ -124,6 +156,8 @@ const renderTodoList = function (msg = "", todos = []) {
     editIcon.className = "material-icons-outlined";
     editIcon.textContent = "edit";
     editButton.append(editIcon);
+    editButton.addEventListener("click", editToDo);
+
     const delButton = document.createElement("button");
     const delIcon = document.createElement("span");
     delIcon.className = "material-icons-outlined";

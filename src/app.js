@@ -58,9 +58,10 @@ function removeToDo(title) {
   activeProject.removeToDo(title);
 }
 
-function updateTodo(todo, updatedInfo) {
+function updateTodo(todo, updatedTodo) {
   const todoIndex = activeProject.findTodoIndex(todo);
-  activeProject.todoList[todoIndex] = { ...todo, ...updatedInfo };
+  console.log(updatedTodo);
+  activeProject.todoList[todoIndex] = new ToDo(...updatedTodo);
 }
 
 function getToDoList() {
