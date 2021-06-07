@@ -1,11 +1,9 @@
 import Project from "./project";
 import ToDo from "./todo";
 
-const defaultProject = new Project("Inbox");
-
+let projectList = loadFromLocalStorage();
+let defaultProject = findProject("Inbox");
 let activeProject = defaultProject;
-
-let projectList = [defaultProject];
 
 function addProject(projectName) {
   if (projectList.find((activeProject) => activeProject.name === projectName))
@@ -24,6 +22,7 @@ function removeProject(projectName) {
 }
 
 function getProjects() {
+  saveToLocalStrorage();
   return projectList.map((project) => ({
     name: project.name,
     todoCount: project.notDoneToDoCount(),
@@ -33,6 +32,7 @@ function getProjects() {
 }
 
 function findProject(projectName) {
+  console.log(projectList);
   const found = projectList.find((project) => project.name === projectName);
   if (!found) throw `Could not find project '${projectName}'`;
   return found;
@@ -79,6 +79,22 @@ function getToDoList() {
     todoList: activeProject.notDoneToDoList(),
     completeList: activeProject.doneToDoList(),
   };
+}
+
+function saveToLocalStrorage() {
+  localStorage.setItem("todoz", JSON.stringify(projectList));
+}
+
+function loadFromLocalStorage() {
+  const dProject = new Project("Inbox");
+  return (JSON.parse(localStorage.getItem("todoz")) || [dProject]).map(
+    (project) => {
+      project.todoList = project.todoList.map((todo) =>
+        Object.assign(new ToDo(), todo)
+      );
+      return Object.assign(new Project(), project);
+    }
+  );
 }
 
 export {
