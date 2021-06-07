@@ -125,6 +125,10 @@ const delToDo = function (e) {
   PubSub.publish("DEL_TODO", e.currentTarget.parentElement.parentElement.id);
 };
 
+const toggleDone = function (e) {
+  PubSub.publish("TOGGLE_TODO", e.currentTarget.parentElement.parentElement.id);
+};
+
 const renderTodoList = function (msg = "", todos = []) {
   activeTodoList = todos;
   const content = document.querySelector(".content");
@@ -141,6 +145,7 @@ const renderTodoList = function (msg = "", todos = []) {
     header.className = "list-header";
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.addEventListener("change", toggleDone);
     const title = document.createElement("span");
     title.textContent = todo.title;
     title.className = "title";

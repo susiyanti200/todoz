@@ -64,6 +64,11 @@ function updateTodo(todo, updatedTodo) {
   activeProject.todoList[todoIndex] = new ToDo(...updatedTodo);
 }
 
+function toggleToDo(todo) {
+  const todoIndex = activeProject.findTodoIndex(todo);
+  activeProject.todoList[todoIndex].toggleIsDone();
+}
+
 function getToDoList() {
   return {
     active: activeProject.name,
@@ -82,4 +87,5 @@ export {
   updateTodo,
   moveToDoToProject,
   getToDoList,
+  toggleToDo,
 };
