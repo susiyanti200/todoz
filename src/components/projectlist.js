@@ -41,7 +41,7 @@ const addProject = function (e) {
 };
 
 const delProject = function (e) {
-  PubSub.publish("DEL_PROJECT", e.target.parentElement.id);
+  PubSub.publish("DEL_PROJECT", e.currentTarget.parentElement.id);
   e.stopPropagation();
 };
 
@@ -82,7 +82,10 @@ const renderProjectList = function (msg = "", projects = []) {
     count.className = "num";
 
     const delButton = document.createElement("button");
-    delButton.textContent = "Del";
+    const delIcon = document.createElement("span");
+    delIcon.className = "material-icons-outlined";
+    delIcon.textContent = "delete";
+    delButton.append(delIcon);
     delButton.addEventListener("click", delProject);
 
     projectEl.append(icon, title, count);
