@@ -1,4 +1,5 @@
 import PubSub from "pubsub-js";
+import { formatDistanceToNow } from "date-fns";
 
 const section = document.createElement("section");
 const header = document.createElement("header");
@@ -159,7 +160,9 @@ const renderTodoList = function (msg = "", todos = []) {
     title.textContent = todo.title;
     title.className = "title";
     const due = document.createElement("span");
-    due.textContent = todo.dueDate;
+    due.textContent = formatDistanceToNow(new Date(todo.dueDate), {
+      addSuffix: true,
+    });
     due.className = `due ${todo.priority}`;
     header.append(checkbox, title, due);
 
