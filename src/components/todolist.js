@@ -16,6 +16,7 @@ const priority = document.createElement("select");
 const project = document.createElement("select");
 const saveButton = document.createElement("button");
 const cancelButton = document.createElement("button");
+const moveToDoEl = document.createElement("ul");
 let activeTodoList;
 
 function generateTodoList() {
@@ -129,6 +130,19 @@ const toggleDone = function (e) {
   PubSub.publish("TOGGLE_TODO", e.currentTarget.parentElement.parentElement.id);
 };
 
+const toggleMoveToDoEl = function (e) {
+  e.currentTarget.parentElement.append(moveToDoEl);
+  moveToDoEl.classList.toggle("hide");
+};
+
+const moveToDoProject = function (e) {
+  console.log(e.currentTarget.parentElement.parentElement.parentElement.id);
+  PubSub.publish("MOVE_TODO", [
+    e.currentTarget.parentElement.parentElement.parentElement.id,
+    e.currentTarget.textContent,
+  ]);
+};
+
 const renderTodoList = function (msg = "", todos = []) {
   activeTodoList = todos;
   const content = document.querySelector(".content");
@@ -156,6 +170,13 @@ const renderTodoList = function (msg = "", todos = []) {
 
     const action = document.createElement("div");
     action.className = "action";
+    const moveButton = document.createElement("button");
+    const moveIcon = document.createElement("span");
+    moveIcon.className = "material-icons-outlined";
+    moveIcon.textContent = "exit_to_app";
+    moveButton.append(moveIcon);
+    moveButton.addEventListener("click", toggleMoveToDoEl);
+
     const editButton = document.createElement("button");
     const editIcon = document.createElement("span");
     editIcon.className = "material-icons-outlined";
@@ -169,7 +190,7 @@ const renderTodoList = function (msg = "", todos = []) {
     delIcon.textContent = "delete";
     delButton.append(delIcon);
     delButton.addEventListener("click", delToDo);
-    action.append(editButton, delButton);
+    action.append(moveButton, editButton, delButton);
     todoEl.append(header, action);
     list.append(todoEl);
   });
@@ -182,12 +203,26 @@ const updateProjectOption = function (msg, data) {
     project.removeChild(child);
     child = project.lastElementChild;
   }
+  let mchild = moveToDoEl.lastElementChild;
+  while (mchild) {
+    moveToDoEl.removeChild(mchild);
+    mchild = moveToDoEl.lastElementChild;
+  }
   data.map((p) => {
     const op = document.createElement("option");
+    const li = document.createElement("li");
     op.textContent = p.name;
-    if (p.active) op.defaultSelected = true;
+    li.textContent = p.name;
+    if (p.active) {
+      op.defaultSelected = true;
+      li.className = "active";
+    }
+    li.addEventListener("click", moveToDoProject);
     project.append(op);
+    moveToDoEl.append(li);
   });
+  moveToDoEl.id = "chooser";
+  moveToDoEl.className = "hide";
 };
 
 const tokenTodoList = PubSub.subscribe("TODOLIST", renderTodoList);

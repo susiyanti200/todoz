@@ -55,3 +55,10 @@ const tokenToggleToDo = PubSub.subscribe("TOGGLE_TODO", (msg, data) => {
   PubSub.publish("PROJECTLIST", App.getProjects());
   PubSub.publish("TODOLIST", App.getToDoList());
 });
+
+const tokenMoveToDo = PubSub.subscribe("MOVE_TODO", (msg, data) => {
+  console.log(data[0], data[1]);
+  App.moveToDoToProject(data[0], data[1]);
+  PubSub.publish("PROJECTLIST", App.getProjects());
+  PubSub.publish("TODOLIST", App.getToDoList());
+});

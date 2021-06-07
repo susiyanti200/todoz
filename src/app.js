@@ -43,9 +43,10 @@ function switchProject(projectName) {
 }
 
 function moveToDoToProject(todo, projectName) {
-  activeProject.removeToDo(todo);
+  const todoIndex = activeProject.findTodoIndex(todo);
   const targetProject = findProject(projectName);
-  targetProject.addToDo(todo);
+  targetProject.addToDo(activeProject.todoList[todoIndex]);
+  activeProject.removeToDo(todo);
 }
 
 function addToDo({ title, description, dueDate, priority, projectName = "" }) {

@@ -169,6 +169,29 @@ input[type="checkbox"] {
   background: green;
 }
 
+.hide {
+  display: none;
+}
+
+#chooser {
+  position: absolute;
+  border: 1px solid #eee;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  z-index: 1;
+  background: white;
+  cursor: pointer;
+}
+
+#chooser li {
+  border: none;
+  margin: 0;
+}
+
+#chooser li:hover {
+  background: #f1f1f1;
+}
+
 @media (min-width: 600px) {
   .sidebar {
     transform: translateX(0);
