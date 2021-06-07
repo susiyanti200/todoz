@@ -9,7 +9,13 @@
   padding: 0;
 }
 
+:root {
+  --color-primary: #139196;
+}
+
 nav {
+  background: var(--color-primary);
+  color: white;
   display: flex;
   height: 6vh;
   padding: 0 1rem;
@@ -92,12 +98,13 @@ button {
 }
 
 .btn-add {
-  border: 1px solid black;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .btn-save {
-  color: orangered;
-  border: 1px solid orangered;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .btn-cancel {
